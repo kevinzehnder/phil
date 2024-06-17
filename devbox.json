@@ -3,7 +3,9 @@
   "packages": [
     "ripgrep@latest",
     "go-task@latest",
-    "go@latest"
+    "go@latest",
+    "air@latest",
+    "gotest@latest"
   ],
   "shell": {
     "init_hook": [
