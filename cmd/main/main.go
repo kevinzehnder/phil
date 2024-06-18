@@ -53,6 +53,7 @@ func main() {
 		log.Info().Msgf("Received signal: %s", sig)
 
 		// Generate a random duration between 10 and 30 seconds
+		// this simulates the time during which existing connections will be handled to completion
 		randomDelay := rand.Intn(21) + 10 // rand.Intn(21) generates a number from 0 to 20
 		delayDuration := time.Duration(randomDelay) * time.Second
 
@@ -61,8 +62,7 @@ func main() {
 
 		time.Sleep(delayDuration)
 
-		// Doesn't block if no connections, but will otherwise wait
-		// until the timeout deadline.
+		// at this point, all open business should be completed and we can stop the server
 		log.Info().Msg("stopping server")
 		server.Stop()
 	}()
