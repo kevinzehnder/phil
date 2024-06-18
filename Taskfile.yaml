@@ -11,7 +11,7 @@ vars:
   IMAGE_NAME: phil
   IMAGE_TAG:
     sh: git describe --tags 2>/dev/null || echo develop
-    
+
   GO_OS: linux # Default OS
   GO_ARCH: amd64 # Default architecture
   APP_NAME: phil # Application name
@@ -19,7 +19,7 @@ vars:
   CONTAINER_NAME: phil_container
   LOCAL_PORT: 3000
   CONTAINER_PORT: 9000
-  
+
 tasks:
   run:
     desc: run main.go
@@ -29,7 +29,7 @@ tasks:
       - go run {{.ENTRYPOINT}}
 
   build:
-    internal: true
+    desc: compile
     vars:
       GO_OS: "{{ .GO_OS }}"
       GO_ARCH: "{{ .GO_ARCH }}"
@@ -40,22 +40,28 @@ tasks:
     desc: run tests
     cmds:
       - gotest -v ./...
-      
+
   container:
     deps: [image]
     desc: run in container
     cmds:
       - docker run -it --rm --name {{.CONTAINER_NAME}} -p {{.LOCAL_PORT}}:{{.CONTAINER_PORT}} -t {{.CONTAINER_REGISTRY}}/{{.REPOSITORY}}/{{.IMAGE_NAME}}:{{.IMAGE_TAG}}
-      
+
   image:
     desc: build container image
     cmds:
       - docker build -t {{.CONTAINER_REGISTRY}}/{{.REPOSITORY}}/{{.IMAGE_NAME}}:{{.IMAGE_TAG}} .
-      
+
   push:
     desc: build container image
     cmds:
       - docker push {{.CONTAINER_REGISTRY}}/{{.REPOSITORY}}/{{.IMAGE_NAME}}:{{.IMAGE_TAG}}
+
+  pushNewImage:
+    desc: build and push container image
+    cmds:
+      - task: image
+      - task: push
 
   swag:
     desc: create swagger docs

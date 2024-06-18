@@ -14,4 +14,5 @@ type Data struct {
 	Name       string            `json:"name,omitempty"`
 	RemoteAddr string            `json:"remoteAddr,omitempty"`
 	Environ    map[string]string `json:"environ,omitempty"`
+	Fuck       string            `json:"fuck"`
 }

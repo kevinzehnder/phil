@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/rs/zerolog v1.27.0
 	github.com/swaggo/files v1.0.0 // indirect
-	github.com/swaggo/swag v1.16.3 // indirect
+	github.com/swaggo/swag v1.16.3
 )
 
 require (

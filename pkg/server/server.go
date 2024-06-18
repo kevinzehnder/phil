@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -16,6 +17,7 @@ import (
 type Server struct {
 	router   *chi.Mux
 	handlers []app.Handler[any]
+	srv      http.Server
 }
 
 func NewServer(handlers ...app.Handler[any]) *Server {
@@ -28,7 +30,12 @@ func NewServer(handlers ...app.Handler[any]) *Server {
 
 func (s *Server) Start(port int) error {
 	address := fmt.Sprintf(":%d", port)
-	return http.ListenAndServe(address, s.router)
+	s.srv = http.Server{Addr: address, Handler: s.router}
+	return s.srv.ListenAndServe()
+}
+
+func (s *Server) Stop() error {
+	return s.srv.Shutdown(context.TODO())
 }
 
 func AddRoutes(router chi.Router, handlers ...app.Handler[any]) {
