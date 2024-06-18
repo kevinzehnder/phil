@@ -28,6 +28,9 @@ func (h *WhoamiHandler) Routes() map[string]map[string]func(http.ResponseWriter,
 		"/": {
 			http.MethodGet: h.Ping,
 		},
+		"/ready": {
+			http.MethodGet: h.Ready,
+		},
 	}
 }
 
@@ -77,4 +80,9 @@ func (h *WhoamiHandler) Ping(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(data)
+}
+
+func (h *WhoamiHandler) Ready(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Ready"))
 }

@@ -24,18 +24,23 @@ import (
 )
 
 func main() {
-	log.Info().Msg("Starting Up...")
+	log.Info().Msg("starting up")
+
+	// random delay, simulating startup in production
+	randomDelay := rand.Intn(21) + 10 // rand.Intn(21) generates a number from 0 to 20
+	delayDuration := time.Duration(randomDelay) * time.Second
+	log.Info().Msgf("setting a random startup delay of %v seconds", randomDelay)
+	time.Sleep(delayDuration)
+	log.Info().Msg("startup phase complete")
 
 	// get configuration
 	_, err := config.GetConfig()
 	if err != nil {
-		log.Fatal().Msgf("Failed to load config: %s", err)
+		log.Fatal().Msgf("failed to load config: %s", err)
 	}
 
-	// create Servicer, pass in the Databaser
+	// prepare routes
 	whoamiSvc := services.NewWhoamiSvc()
-
-	// create Handler, pass in the Servicer
 	whoamiHandler := handlers.NewWhoamiHandler(whoamiSvc)
 
 	// create Server. pass in the Handlers.
@@ -50,7 +55,7 @@ func main() {
 
 		// Block until a signal is received
 		sig := <-stop
-		log.Info().Msgf("Received signal: %s", sig)
+		log.Info().Msgf("received signal: %s", sig)
 
 		// Generate a random duration between 10 and 30 seconds
 		// this simulates the time during which existing connections will be handled to completion
@@ -58,7 +63,7 @@ func main() {
 		delayDuration := time.Duration(randomDelay) * time.Second
 
 		// Log the duration
-		log.Info().Msgf("Setting a random shutdown delay of %v seconds", randomDelay)
+		log.Info().Msgf("setting a random shutdown delay of %v seconds", randomDelay)
 
 		time.Sleep(delayDuration)
 
