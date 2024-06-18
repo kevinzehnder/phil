@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/kevinzehnder/phil/internal/config"
 	"github.com/kevinzehnder/phil/pkg/app"
 	"github.com/kevinzehnder/phil/pkg/errs"
 	"github.com/kevinzehnder/phil/pkg/services"
@@ -55,10 +56,13 @@ func (h *WhoamiHandler) Ping(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// backgroundColor := "#3dfaf0"
+	settings, _ := config.GetConfig()
+	version := settings.Version
 
 	hostname, _ := os.Hostname()
 
 	data := app.Data{
+		Version:    version,
 		Hostname:   hostname,
 		IP:         h.Svc.GetIPs(),
 		Headers:    r.Header,

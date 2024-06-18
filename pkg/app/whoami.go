@@ -4,6 +4,7 @@ import "net/http"
 
 // Data whoami information.
 type Data struct {
+	Version    string            `json:"version,omitempty"`
 	Hostname   string            `json:"hostname,omitempty"`
 	IP         []string          `json:"ip,omitempty"`
 	Headers    http.Header       `json:"headers,omitempty"`

@@ -23,6 +23,8 @@ vars:
 tasks:
   run:
     desc: run main.go
+    env:
+      version: 1.0.0
     cmds:
       - go run {{.ENTRYPOINT}}
 

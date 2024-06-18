@@ -5,11 +5,8 @@ import (
 	"sync"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
-	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/v2"
-	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -20,8 +17,7 @@ var (
 )
 
 type Config struct {
-	// Something string `validate:"required"`
-	Something string
+	Version string `validate:"required"`
 }
 
 // GetConfig initializes and returns the application configuration.
@@ -32,13 +28,13 @@ type Config struct {
 func GetConfig() (Config, error) {
 	once.Do(func() {
 		// Load YAML configuration
-		err := k.Load(file.Provider("config.yaml"), yaml.Parser())
-		if err != nil {
-			log.Debug().Msg(fmt.Sprintf("couldn't read config.yaml: %s", err))
-		}
+		// err := k.Load(file.Provider("config.yaml"), yaml.Parser())
+		// if err != nil {
+		// 	log.Debug().Msg(fmt.Sprintf("couldn't read config.yaml: %s", err))
+		// }
 
 		// Load Environment Variables and override YAML settings
-		err = k.Load(env.Provider("", ".", func(s string) string {
+		err := k.Load(env.Provider("", ".", func(s string) string {
 			return s
 		}), nil)
 		if err != nil {
